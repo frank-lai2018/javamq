@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<!-- 開啟包的自動掃描 -->
+	<context:component-scan
+		base-package="com.frank.activemq" />
+
+	<!-- 配置生產者 -->
+	<bean id="jmsFactory"
+		class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL"
+					value="tcp://192.168.47.129:61616"></property>
+			</bean>
+		</property>
+		<property name="maxConnections" value="100"></property>
+	</bean>
+
+
+	<!-- 這個是對列的目的地,點對點的Queue -->
+	<bean id="destinationQueue"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<!-- 通過構造注入Queue名 -->
+		<constructor-arg index="0" value="spring-active-queue" />
+	</bean>
+
+	<!-- 這個是隊列目的地, 發布訂閱的主題Topic -->
+	<bean id="destinationTopic"
+		class="org.apache.activemq.command.ActiveMQTopic">
+		<constructor-arg index="0" value="spring-active-topic" />
+	</bean>
+
+	<!-- Spring提供的JMS工具類,他可以進行消息發送,接收等 -->
+	<bean id="jmsTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<!-- 傳入連接工廠 -->
+		<property name="connectionFactory" ref="jmsFactory" />
+		<!-- 傳入目的地 -->
+		<property name="defaultDestination" ref="destinationTopic" />
+		<!-- 消息自動轉換器 -->
+		<property name="messageConverter">
+			<bean
+				class="org.springframework.jms.support.converter.SimpleMessageConverter" />
+		</property>
+	</bean>
+	
+	<!--  配置Jms消息監聽器  -->
+    <bean id="defaultMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <!--  Jms連接的工廠     -->
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <!--   設置默認的監聽目的地     -->
+        <property name="destination" ref="destinationTopic"/>
+        <!--  指定自己實現了MessageListener的類     -->
+        <property name="messageListener" ref="myMessageListener"/>
+    </bean>
+
+	<!--<bean id = "myMessageListener" class="com.frank.activemq.MyMessageListener"></bean>-->
+</beans>

@@ -1,0 +1,11 @@
+*/.settings/
+*/.metadata/*
+*/bin
+*.project
+*.classpath
+*.class
+*/target/
+.settings
+.metadata
+/microservicecloud-api/*.factorypath
+/microservicecloud-provider-dept-8001/*.factorypath

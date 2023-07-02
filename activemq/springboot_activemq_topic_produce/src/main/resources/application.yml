@@ -1,0 +1,13 @@
+server: 
+  port: 5501
+
+spring: 
+  activemq:
+    broker-url: tcp://192.168.47.129:61616 #MQ服務器地址
+    user: admin
+    password: admin
+  
+  jms: 
+    pub-sub-domain: true # false = Queue(默認)，true = Topic
+
+
