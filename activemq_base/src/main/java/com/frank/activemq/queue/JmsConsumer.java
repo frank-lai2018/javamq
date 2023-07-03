@@ -17,8 +17,9 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 public class JmsConsumer {
 	
 //	public static final String ACTIVEMQ_URL = "tcp://192.168.47.129:61616";
-	public static final String ACTIVEMQ_URL = "tcp://localhost:61616";
-	public static final String QUEUE_NAME = "queue01";
+	public static final String ACTIVEMQ_URL = "nio://192.168.47.129:61618";
+//	public static final String ACTIVEMQ_URL = "tcp://localhost:61616";
+	public static final String QUEUE_NAME = "queue032";
 
 	public static void main(String[] args) throws JMSException, IOException {
 		//1.創建連接工廠，按照給定的URL地址，採用默認用戶名和密碼

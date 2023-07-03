@@ -3,7 +3,8 @@ server:
 
 spring: 
   activemq:
-    broker-url: tcp://192.168.47.129:61616 #MQ服務器地址
+    #broker-url: tcp://192.168.47.129:61616 #MQ服務器地址
+    broker-url: nio://192.168.47.129:61618 #MQ服務器地址，nio協議，生產環境用的
     user: admin
     password: admin
   
